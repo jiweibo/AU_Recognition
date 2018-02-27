@@ -102,3 +102,4 @@ ENV/
 
 # IDE
 .idea
+*.pth

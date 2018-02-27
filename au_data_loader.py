@@ -1,9 +1,7 @@
 import os
-import shutil
 
 import torch
 from torch.utils.data import Dataset
-import torchvision
 
 from PIL import Image, ImageDraw
 import numpy as np
@@ -46,7 +44,7 @@ def get_reserved_set():
     for label in label_set:
         if ll.count(label) > 90:
             reserved_set.add(label)
-    return reserved_set, returned_label # (1, 2, 4, 5, 6, 7, 12, 15, 17, 25)
+    return reserved_set, returned_label  # (1, 2, 4, 5, 6, 7, 12, 15, 17, 25)
 
 
 def convert_label(init_label, reserved_set):
@@ -92,6 +90,7 @@ def crop_au_img(img, landmark):
 
 reserved_set, reserved_label = get_reserved_set()
 
+
 class au_data_loader(Dataset):
     def __init__(self, data_path_dir, label_path_dir, landmark_path_dir, emotion_path_dir,
                  dataset='train', transform=None, target_transform=None):
@@ -103,12 +102,14 @@ class au_data_loader(Dataset):
                 sequence = os.path.join(name, sequences)
                 if os.path.isdir(sequence):
                     if os.listdir(sequence):
-                        self.au_image.append(Image.open(os.path.join(sequence, os.listdir(sequence)[-1])))
+                        self.au_image.append(
+                            Image.open(os.path.join(sequence, os.listdir(sequence)[-1])).convert('RGB'))
 
         # prepare au label
         self.au_label = []
         for l in reserved_label:
             self.au_label.append(convert_label(l.tolist(), reserved_set))
+        self.au_label = torch.from_numpy(np.array(self.au_label)).float()
 
         # prepare au landmark
         self.au_landmark = []

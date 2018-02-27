@@ -110,6 +110,108 @@ class AlexNet(nn.Module):
             nn.Sigmoid()
         )
 
+        # self.classifier1 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier2 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier3 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier4 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier5 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier6 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier7 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier8 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier9 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier10 = nn.Sequential(
+        #     nn.Dropout(),
+        #     nn.Linear(256 * 6 * 6, 4096),
+        #     nn.ReLU(inplace=True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 256),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+
+
     def forward(self, x):
         x = self.features(x)
         x = x.view(x.size(0), 256 * 6 * 6)
