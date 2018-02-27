@@ -1,16 +1,15 @@
 import argparse
 import os
 
-import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision import transforms
-from model import alexnet
 
 from au_data_loader import au_data_loader
 from helper import *
+from model import alexnet
 
 parser = argparse.ArgumentParser(description='AU Recognition')
 parser.add_argument('--data_path_dir', default=r'E:\DataSets\CKPlus\cohn-kanade-images',
@@ -25,11 +24,10 @@ parser.add_argument('--epochs', default=100, type=int, metavar='N',
                     help='numer of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful to restarts)')
-parser.add_argument('-b', '--batch-size', default=16, type=int, metavar='N',
-                    help='mini-batch size (default: 16)')
+parser.add_argument('-b', '--batch-size', default=32, type=int, metavar='N',
+                    help='mini-batch size (default: 32)')
 parser.add_argument('--lr', '--learning-rate', default=0.01, type=float, metavar='LR',
                     help='initial learning rate')
-
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoitn, (default: None)')
 parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
@@ -75,8 +73,8 @@ def train(train_loader, model, criterion, optimizer, epoch, print_freq=5):
         if (i + 1) % print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-                  'F1_Score {3} ({4})'.format(
-                epoch, i + 1, len(train_loader), f1_sc.val, f1_sc.avg, loss=losses))
+                  'F1_Score [{3}] ({4})'.format(
+                epoch, i + 1, len(train_loader), np.mean(f1_sc.avg), f1_sc.avg, loss=losses))
 
 
 def valid(val_loader, model, criterion, print_freq=1):
@@ -113,10 +111,9 @@ def valid(val_loader, model, criterion, print_freq=1):
         if (i + 1) % print_freq == 0:
             print('Validate: [{0}/{1}]\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})\t'
-                  # 'Accuracy {2} ({3})\t'
-                  'F1 {2} ({3})'.format(
-                i + 1, len(val_loader), f1_sc.val, f1_sc.avg, loss=losses))
-    return np.mean(prec.avg)
+                  'F1_Score [{2}] ({3})'.format(
+                i + 1, len(val_loader), np.mean(f1_sc.avg), f1_sc.avg, loss=losses))
+    return np.mean(f1_sc.avg)
 
 
 def main():
