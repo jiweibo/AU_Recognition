@@ -1,5 +1,6 @@
 import argparse
 import os
+import itertools
 
 import torch.nn as nn
 import torch.optim as optim
@@ -7,11 +8,14 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from sklearn.model_selection import KFold
+from sklearn.metrics import f1_score, precision_score, recall_score, confusion_matrix
+import matplotlib.pyplot as plt
 
 from au_data_loader import *
 from helper import *
 from model import alexnet
 
+# <editor-fold desc="settings">
 parser = argparse.ArgumentParser(description='AU Recognition')
 parser.add_argument('--data_path_dir', default=r'E:\DataSets\CKPlus\cohn-kanade-images',
                     metavar='DIR', help='path to data dir')
@@ -19,8 +23,8 @@ parser.add_argument('--label_path_dir', default=r'E:\DataSets\CKPlus\FACS_labels
                     metavar='DIR', help='path to label dir')
 parser.add_argument('--landmark_path_dir', default=r'E:\DataSets\CKPlus\Landmarks\Landmarks',
                     metavar='DIR', help='path to landmark dir')
-parser.add_argument('--emotion_path_dir', default=r'E:\DataSets\CKPlus\Emotion_labels\Emotion',
-                    metavar='DIR', help='path to emotion dir')
+# parser.add_argument('--emotion_path_dir', default=r'E:\DataSets\CKPlus\Emotion_labels\Emotion',
+#                     metavar='DIR', help='path to emotion dir')
 parser.add_argument('--epochs', default=100, type=int, metavar='N',
                     help='numer of total epochs to run')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
@@ -35,6 +39,9 @@ parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
                     help='evaluate model on validation set')
 
 best_prec = np.inf
+
+
+# </editor-fold>
 
 
 def train(train_loader, model, criterion, optimizer, epoch, print_freq=5):
@@ -126,7 +133,7 @@ def main():
     data_path_dir = args.data_path_dir  # r'E:\DataSets\CKPlus\cohn-kanade-images'
     label_path_dir = args.label_path_dir  # r'E:\DataSets\CKPlus\FACS_labels\FACS'
     landmark_path_dir = args.landmark_path_dir  # r'E:\DataSets\CKPlus\Landmarks\Landmarks'
-    emotion_path_dir = args.emotion_path_dir  # r'E:\DataSets\CKPlus\Emotion_labels\Emotion'
+    # emotion_path_dir = args.emotion_path_dir  # r'E:\DataSets\CKPlus\Emotion_labels\Emotion'
 
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
@@ -159,7 +166,7 @@ def main():
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
 
-    fold = 3
+    fold = 5
     kf = KFold(fold, shuffle=True, random_state=20)
     res_tar, res_pred = [], []
     for k, (train_index, test_index) in enumerate(kf.split(au_image, au_label)):
@@ -168,14 +175,15 @@ def main():
         train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, pin_memory=True)
         valid_loader = DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False, pin_memory=True)
 
-        # build a new model
-        model, criterion, optimizer = build_model()
-
+        # todo: setting validation set for test
         if args.evaluate:
             tar, pred, _ = valid(valid_loader, model, criterion)
             res_pred.extend(pred)
             res_tar.extend(tar)
             continue
+
+        # build a new model
+        model, criterion, optimizer = build_model()
 
         for epoch in range(args.start_epoch, args.epochs):
             adjust_learning_rate(optimizer, epoch, args.lr, 10)
@@ -187,18 +195,34 @@ def main():
         is_best = ls < best_prec
         best_prec = min(ls, best_prec)
         save_checkpoint({
-            # 'epoch': epoch + 1,
             'state_dict': model.state_dict(),
             'best_prec': best_prec,
             'optimizer': optimizer.state_dict()
         }, is_best)
-        print('fold {0}'.format(k))
+        print('fold: {0}\t loss: {1}'.format(k, ls))
 
     res_pred = np.array(res_pred)
     res_tar = np.array(res_tar)
 
-    f1 = f1_score(res_pred, res_tar)
-    print(f1)
+    # f1 = f1_score(res_pred, res_tar)
+    for i in range(res_tar.shape[1]):
+        print()
+        print('AU' + str(list(reserved_set)[i]) + ':' +
+              str(f1_score(res_tar[:, i], np.around(res_pred[:, i]))))
+        cm = confusion_matrix(res_tar[:, i], np.around(res_pred[:, i]))
+        plt.figure()
+        plot_confusion_matrix(cm, classes=[0, 1])
+        # plt.figure()
+        # plot_confusion_matrix(cm, classes=[0, 1], normalize=True)
+        plt.show()
+        print()
+    # for i in range(res_tar.shape[1]):
+    #     print(precision_score(res_tar[:, i], np.around(res_pred[:, i])))
+    # print()
+    # for i in range(res_tar.shape[1]):
+    #     print(recall_score(res_tar[:, i], np.around(res_pred[:, i])))
+    # print(f1)
+    # print(np.mean(f1))
 
 
 def build_model(pretrained=True):
@@ -208,9 +232,44 @@ def build_model(pretrained=True):
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4)
     for param in model.features.parameters():
         param.requires_grad = False
-    for param in model.classifier.parameters():
-        param.requires_grad = False
+    # for param in model.classifier.parameters():
+    #     param.requires_grad = False
     return model, criterion, optimizer
+
+
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Confusion matrix',
+                          cmap=plt.cm.Blues):
+    """
+    This function prints and plots the confusion matrix.
+    Normalization can be applied by setting `normalize=True`.
+    """
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        print("Normalized confusion matrix")
+    else:
+        print('Confusion matrix, without normalization')
+
+    print(cm)
+
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+
+    fmt = '.2f' if normalize else 'd'
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, format(cm[i, j], fmt),
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
 
 
 if __name__ == '__main__':
