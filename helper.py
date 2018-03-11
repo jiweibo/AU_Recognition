@@ -42,8 +42,7 @@ def accuracy(output, target):
     return acc.tolist()
 
 
-def f1_score(output, target, eps=1e-5):
-    # # todo: divide zero
+def f1score_helper(output, target, eps=1e-5):
     # pred = (output >= 0.5).float()
     # tp = (pred * target).sum(dim=0)
     # p = pred.sum(dim=0)
