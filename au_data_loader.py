@@ -6,13 +6,8 @@ from torch.utils.data import Dataset
 from PIL import Image, ImageDraw
 import numpy as np
 
-data_path_dir = r'E:\DataSets\CKPlus\cohn-kanade-images'
-label_path_dir = r'E:\DataSets\CKPlus\FACS_labels\FACS'
-landmark_path_dir = r'E:\DataSets\CKPlus\Landmarks\Landmarks'
-emotion_path_dir = r'E:\DataSets\CKPlus\Emotion_labels\Emotion'
 
-
-def get_reserved_set():
+def get_reserved_set(label_path_dir):
     au_label = []
     returned_label = []
     for names in os.listdir(label_path_dir):
@@ -88,78 +83,74 @@ def crop_au_img(img, landmark):
     return img
 
 
-reserved_set, reserved_label = get_reserved_set()
+def load_au_image_from_path(data_path_dir):
+    # prepare au image
+    au_image = []
+    for names in os.listdir(data_path_dir):
+        name = os.path.join(data_path_dir, names)
+        for sequences in os.listdir(name):
+            sequence = os.path.join(name, sequences)
+            if os.path.isdir(sequence):
+                if os.listdir(sequence):
+                    au_image.append(
+                        Image.open(os.path.join(sequence, os.listdir(sequence)[-1])).convert('RGB'))
+    return au_image
+
+
+def load_au_label_from_path(label_path_dir, reserved_label, reserved_set):
+    # prepare au label
+    au_label = []
+    for l in reserved_label:
+        au_label.append(convert_label(l.tolist(), reserved_set))
+    return au_label
+
+
+def load_au_landmark_from_path(landmark_path_dir):
+    au_landmark = []
+    for names in os.listdir(landmark_path_dir):
+        name = os.path.join(landmark_path_dir, names)
+        for sequences in os.listdir(name):
+            sequence = os.path.join(name, sequences)
+            if os.listdir(sequence):
+                au_landmark.append(np.loadtxt(os.path.join(sequence, os.listdir(sequence)[-1])))
+    return au_landmark
+
+
+def load_au_emotion_from_path(emotion_path_dir):
+    au_emotion_landmark_path = []
+    for names in os.listdir(emotion_path_dir):
+        name = os.path.join(emotion_path_dir, names)
+        for sequences in os.listdir(name):
+            sequence = os.path.join(name, sequences)
+            if os.listdir(sequence):
+                au_emotion_landmark_path.append(os.path.join(sequence, os.listdir(sequence)[-1]))
+    return au_emotion_landmark_path
 
 
 class au_data_loader(Dataset):
-    def __init__(self, data_path_dir, label_path_dir, landmark_path_dir, emotion_path_dir,
-                 dataset='train', transform=None, target_transform=None):
+    def __init__(self, au_image, au_label, transform=None, target_transform=None):
         # prepare au image
-        self.au_image = []
-        for names in os.listdir(data_path_dir):
-            name = os.path.join(data_path_dir, names)
-            for sequences in os.listdir(name):
-                sequence = os.path.join(name, sequences)
-                if os.path.isdir(sequence):
-                    if os.listdir(sequence):
-                        self.au_image.append(
-                            Image.open(os.path.join(sequence, os.listdir(sequence)[-1])).convert('RGB'))
+        self.au_image = au_image
 
         # prepare au label
-        self.au_label = []
-        for l in reserved_label:
-            self.au_label.append(convert_label(l.tolist(), reserved_set))
+        self.au_label = au_label
         self.au_label = torch.from_numpy(np.array(self.au_label)).float()
 
         # prepare au landmark
-        self.au_landmark = []
-        for names in os.listdir(landmark_path_dir):
-            name = os.path.join(landmark_path_dir, names)
-            for sequences in os.listdir(name):
-                sequence = os.path.join(name, sequences)
-                if os.listdir(sequence):
-                    self.au_landmark.append(np.loadtxt(os.path.join(sequence, os.listdir(sequence)[-1])))
-
+        # self.au_landmark = au_landmark
         # prepare au emotions
-        self.au_emotion_landmark_path = []
-        for names in os.listdir(emotion_path_dir):
-            name = os.path.join(emotion_path_dir, names)
-            for sequences in os.listdir(name):
-                sequence = os.path.join(name, sequences)
-                if os.listdir(sequence):
-                    self.au_emotion_landmark_path.append(os.path.join(sequence, os.listdir(sequence)[-1]))
-                    # np.loadtxt(os.path.join(sequence, os.listdir(sequence)[0]))
+        # self.au_emotion_landmark_path = au_emotion_landmark_path
 
         self.transform = transform
         self.target_transform = target_transform
-        self.dataset = dataset
 
-        if self.dataset == 'train':
-            self.train_data = self.au_image[:400]
-            self.train_label = self.au_label[:400]
-            self.train_landmark = self.au_landmark[:400]
-        elif self.dataset == 'valid':
-            self.val_data = self.au_image[400:493]
-            self.val_label = self.au_label[400:493]
-            self.val_landmark = self.au_landmark[400:493]
-        else:
-            self.test_data = self.au_image[493:]
-            self.test_label = self.au_label[493:]
-            self.test_landmark = self.au_landmark[493:]
+        self.train_data = self.au_image
+        self.train_label = self.au_label
 
     def __getitem__(self, index):
-        if self.dataset == 'train':
-            img = self.train_data[index]
-            img = crop_au_img(img, self.train_landmark[index])
-            target = self.train_label[index]
-        elif self.dataset == 'valid':
-            img = self.val_data[index]
-            img = crop_au_img(img, self.val_landmark[index])
-            target = self.val_label[index]
-        else:
-            img = self.test_data[index]
-            img = crop_au_img(img, self.test_landmark[index])
-            target = self.test_label[index]
+        img = self.train_data[index]
+        img = Image.fromarray(img)
+        target = self.train_label[index]
 
         if self.transform is not None:
             img = self.transform(img)
@@ -170,9 +161,4 @@ class au_data_loader(Dataset):
         return img, target
 
     def __len__(self):
-        if self.dataset == 'train':
-            return len(self.train_data)
-        elif self.dataset == 'valid':
-            return len(self.val_data)
-        else:
-            return len(self.test_data)
+        return len(self.train_data)

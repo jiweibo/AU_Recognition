@@ -43,20 +43,28 @@ def accuracy(output, target):
 
 
 def f1_score(output, target, eps=1e-5):
-    # todo: divide zero
-    pred = (output >= 0.5).float()
-    tp = (pred * target).sum(dim=0)
-    p = pred.sum(dim=0)
-    precision = tp / (p+eps)
-    t = target.sum(dim=0)
-    recall = tp / (t+eps)
-    f1 = 2 * precision * recall / (precision + recall)
-    return f1.cpu().tolist()
+    # # todo: divide zero
+    # pred = (output >= 0.5).float()
+    # tp = (pred * target).sum(dim=0)
+    # p = pred.sum(dim=0)
+    # precision = tp / (p+eps)
+    # t = target.sum(dim=0)
+    # recall = tp / (t+eps)
+    # f1 = 2 * precision * recall / (precision + recall)
+    # return f1.cpu().tolist()
+    pred = (output >= 0.5).astype(np.float32)
+    tp = np.sum(pred * target, axis=0)
+    p = np.sum(pred, axis=0)
+    precision = tp / (p + eps)
+    t = np.sum(target, axis=0)
+    recall = tp / (t + eps)
+    f1 = 2 * recall * precision / (precision + recall)
+    return f1
 
 
-def adjust_learning_rate(optimizer, epoch, init_lr):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = init_lr * (0.1 ** (epoch // 30))
+def adjust_learning_rate(optimizer, epoch, init_lr, steps=50):
+    """Sets the learning rate to the initial LR decayed by 10 every steps epochs"""
+    lr = init_lr * (0.5 ** (epoch // steps))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
