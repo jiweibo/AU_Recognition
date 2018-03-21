@@ -1,5 +1,4 @@
 import argparse
-import os
 import itertools
 
 import torch.nn as nn
@@ -8,20 +7,20 @@ from torch.autograd import Variable
 from torch.utils.data import DataLoader
 from torchvision import transforms
 from sklearn.model_selection import KFold
-from sklearn.metrics import f1_score, precision_score, recall_score, confusion_matrix
+from sklearn.metrics import f1_score, confusion_matrix
 import matplotlib.pyplot as plt
 
 from au_data_loader import *
 from helper import *
-from model import alexnet
+from Model import *
 
 # <editor-fold desc="settings">
 parser = argparse.ArgumentParser(description='AU Recognition')
-parser.add_argument('--data_path_dir', default=r'E:\DataSets\CKPlus\cohn-kanade-images',
+parser.add_argument('data_path_dir', default=r'E:\DataSets\CKPlus\cohn-kanade-images',
                     metavar='DIR', help='path to data dir')
-parser.add_argument('--label_path_dir', default=r'E:\DataSets\CKPlus\FACS_labels\FACS',
+parser.add_argument('label_path_dir', default=r'E:\DataSets\CKPlus\FACS_labels\FACS',
                     metavar='DIR', help='path to label dir')
-parser.add_argument('--landmark_path_dir', default=r'E:\DataSets\CKPlus\Landmarks\Landmarks',
+parser.add_argument('landmark_path_dir', default=r'E:\DataSets\CKPlus\Landmarks\Landmarks',
                     metavar='DIR', help='path to landmark dir')
 # parser.add_argument('--emotion_path_dir', default=r'E:\DataSets\CKPlus\Emotion_labels\Emotion',
 #                     metavar='DIR', help='path to emotion dir')
@@ -175,7 +174,6 @@ def main():
         train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True, pin_memory=True)
         valid_loader = DataLoader(valid_dataset, batch_size=args.batch_size, shuffle=False, pin_memory=True)
 
-        # todo: setting validation set for test
         if args.evaluate:
             tar, pred, _ = valid(valid_loader, model, criterion)
             res_pred.extend(pred)
@@ -204,10 +202,12 @@ def main():
     res_pred = np.array(res_pred)
     res_tar = np.array(res_tar)
 
-    # f1 = f1_score(res_pred, res_tar)
+    out = []
     for i in range(res_tar.shape[1]):
         print()
         print('AU' + str(list(reserved_set)[i]) + ':' +
+              str(f1_score(res_tar[:, i], np.around(res_pred[:, i]))))
+        out.append('AU' + str(list(reserved_set)[i]) + ':' +
               str(f1_score(res_tar[:, i], np.around(res_pred[:, i]))))
         cm = confusion_matrix(res_tar[:, i], np.around(res_pred[:, i]))
         plt.figure()
@@ -216,13 +216,12 @@ def main():
         # plot_confusion_matrix(cm, classes=[0, 1], normalize=True)
         plt.show()
         print()
-    # for i in range(res_tar.shape[1]):
-    #     print(precision_score(res_tar[:, i], np.around(res_pred[:, i])))
-    # print()
-    # for i in range(res_tar.shape[1]):
-    #     print(recall_score(res_tar[:, i], np.around(res_pred[:, i])))
-    # print(f1)
-    # print(np.mean(f1))
+
+    # write to txt
+    with open('alexnet_output.txt', 'w') as f:
+        for i in out:
+            f.writelines(i)
+            f.write('\n')
 
 
 def build_model(pretrained=True):
