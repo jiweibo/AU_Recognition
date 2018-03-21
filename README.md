@@ -128,9 +128,21 @@ The model architecture as shown
 
 ### Inception
 
+inception基本单元
+
+inception cell
+
+![inception_cell](./images/inception_cell.bmp)
+
 ![inception](./images/inception.bmp)
 
 ### ResNet
+
+resnet基本单元
+
+resnet cell
+
+![resnet_cee](./images/resnet_cell.bmp)
 
 ![resnet](./images/resnet.bmp)
 
