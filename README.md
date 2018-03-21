@@ -79,7 +79,7 @@ AU62: 2
 AU63: 2
 AU64: 4
 ```
-![AU_dist](../images/au_dist.bmp)
+![AU_dist](./images/au_dist.bmp)
 
 数据和图中皆反映出AU分布非常不均匀，在此，只选择数量大于90的AU作为数据集。
 
@@ -101,9 +101,9 @@ CKPlus中的数据集为灰度图，此外，根据landmark将脸部附近区域
 
 The dataset in CKPlus is a grayscale image. In addition, the region near the face is extracted from the landmark, and then it needs to be resized to the size required by the network model and finally converted to an RGB image.
 
-![image_1](../images/au_image_1.png)
+![image_1](./images/au_image_1.png)
 
-![image_1](../images/au_image_1_process.png)
+![image_1](./images/au_image_1_process.png)
 
 
 ## Model Architecture
@@ -116,23 +116,23 @@ Using the alexnet, vgg, resnet, and inception network architectures as feature e
 
 The model architecture as shown
 
-![archtecture](../images/model_architecture.bmp)
+![archtecture](./images/model_architecture.bmp)
 
 ### AlexNet
 
-![alexnet](../images/alexnet.bmp)
+![alexnet](./images/alexnet.bmp)
 
 ### VGG
 
-![vgg](../images/vgg.bmp)
+![vgg](./images/vgg.bmp)
 
 ### Inception
 
-![inception](../images/inception.bmp)
+![inception](./images/inception.bmp)
 
 ### ResNet
 
-![resnet](../images/resnet.bmp)
+![resnet](./images/resnet.bmp)
 
 
 ## Experiments
