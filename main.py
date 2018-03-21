@@ -22,6 +22,8 @@ parser.add_argument('label_path_dir', default=r'E:\DataSets\CKPlus\FACS_labels\F
                     metavar='DIR', help='path to label dir')
 parser.add_argument('landmark_path_dir', default=r'E:\DataSets\CKPlus\Landmarks\Landmarks',
                     metavar='DIR', help='path to landmark dir')
+parser.add_argument('--model', default='alexnet', metavar='MODEL',
+                    help='alexnet or vgg16 or vgg16_bn or vgg19 or res18 or res50 or res101 or inception')
 # parser.add_argument('--emotion_path_dir', default=r'E:\DataSets\CKPlus\Emotion_labels\Emotion',
 #                     metavar='DIR', help='path to emotion dir')
 parser.add_argument('--epochs', default=100, type=int, metavar='N',
@@ -134,12 +136,20 @@ def main():
     landmark_path_dir = args.landmark_path_dir  # r'E:\DataSets\CKPlus\Landmarks\Landmarks'
     # emotion_path_dir = args.emotion_path_dir  # r'E:\DataSets\CKPlus\Emotion_labels\Emotion'
 
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=[0.5, 0.5, 0.5],
-                             std=[0.5, 0.5, 0.5])
-    ])
+    if args.model == 'inception':
+        transform = transforms.Compose([
+            transforms.Resize((299, 299)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5, 0.5, 0.5],
+                                 std=[0.5, 0.5, 0.5])
+        ])
+    else:
+        transform = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5, 0.5, 0.5],
+                                 std=[0.5, 0.5, 0.5])
+        ])
 
     reserved_set, reserved_label = get_reserved_set(label_path_dir)
     au_image = load_au_image_from_path(data_path_dir)
@@ -165,7 +175,7 @@ def main():
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
 
-    fold = 5
+    fold = 10
     kf = KFold(fold, shuffle=True, random_state=20)
     res_tar, res_pred = [], []
     for k, (train_index, test_index) in enumerate(kf.split(au_image, au_label)):
@@ -206,9 +216,9 @@ def main():
     for i in range(res_tar.shape[1]):
         print()
         print('AU' + str(list(reserved_set)[i]) + ':' +
-              str(f1_score(res_tar[:, i], np.around(res_pred[:, i]))))
+              str(round(f1_score(res_tar[:, i], np.around(res_pred[:, i])), 2)))
         out.append('AU' + str(list(reserved_set)[i]) + ':' +
-              str(f1_score(res_tar[:, i], np.around(res_pred[:, i]))))
+                   str(round(f1_score(res_tar[:, i], np.around(res_pred[:, i])), 2)))
         cm = confusion_matrix(res_tar[:, i], np.around(res_pred[:, i]))
         plt.figure()
         plot_confusion_matrix(cm, classes=[0, 1])
@@ -218,19 +228,57 @@ def main():
         print()
 
     # write to txt
-    with open('alexnet_output.txt', 'w') as f:
+    output_txt = str(args.model) + '_output.txt'
+    with open(output_txt, 'w') as f:
         for i in out:
             f.writelines(i)
             f.write('\n')
 
 
 def build_model(pretrained=True):
-    model = alexnet(pretrained=pretrained)
+    if args.model == 'alexnet':
+        model = alexnet(pretrained=pretrained)
+    elif args.model == 'vgg16':
+        model = vgg16(pretrained=pretrained)
+    elif args.model == 'vgg16_bn':
+        model = vgg16_bn(pretrained=pretrained)
+    elif args.model == 'vgg19':
+        model = vgg19(pretrained=pretrained)
+    elif args.model == 'res18':
+        model = resnet18(pretrained=pretrained)
+    elif args.model == 'res50':
+        model = resnet50(pretrained=pretrained)
+    elif args.model == 'res101':
+        model = resnet101(pretrained=pretrained)
+    elif args.model == 'inception':
+        model = inception_v3(pretrained=pretrained)
+    else:
+        raise ValueError('not supported model')
     model.cuda()
     criterion = nn.BCELoss().cuda()
     optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=0.9, weight_decay=1e-4)
-    for param in model.features.parameters():
+    for param in model.parameters():
         param.requires_grad = False
+    for param in model.classifier1.parameters():
+        param.requires_grad = True
+    for param in model.classifier2.parameters():
+        param.requires_grad = True
+    for param in model.classifier3.parameters():
+        param.requires_grad = True
+    for param in model.classifier4.parameters():
+        param.requires_grad = True
+    for param in model.classifier5.parameters():
+        param.requires_grad = True
+    for param in model.classifier6.parameters():
+        param.requires_grad = True
+    for param in model.classifier7.parameters():
+        param.requires_grad = True
+    for param in model.classifier8.parameters():
+        param.requires_grad = True
+    for param in model.classifier9.parameters():
+        param.requires_grad = True
+    for param in model.classifier10.parameters():
+        param.requires_grad = True
     # for param in model.classifier.parameters():
     #     param.requires_grad = False
     return model, criterion, optimizer
