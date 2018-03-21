@@ -28,6 +28,8 @@ parser.add_argument('--model', default='alexnet', metavar='MODEL',
 #                     metavar='DIR', help='path to emotion dir')
 parser.add_argument('--epochs', default=100, type=int, metavar='N',
                     help='numer of total epochs to run')
+parser.add_argument('--step', default=20, type=int, metavar='N',
+                    help='numer of epochs to adjust learning rate')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful to restarts)')
 parser.add_argument('-b', '--batch-size', default=32, type=int, metavar='N',
@@ -194,7 +196,7 @@ def main():
         model, criterion, optimizer = build_model()
 
         for epoch in range(args.start_epoch, args.epochs):
-            adjust_learning_rate(optimizer, epoch, args.lr, 10)
+            adjust_learning_rate(optimizer, epoch, args.lr, args.step)
             train(train_loader, model, criterion, optimizer, epoch)
         tar, pred, ls = valid(valid_loader, model, criterion)
         res_pred.extend(pred)
