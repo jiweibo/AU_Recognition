@@ -24,7 +24,7 @@ This database is based on the Cohn-Kanade Dataset and was released in 2010. This
 
 The database contains 123 subjects, 593 image sequences, and the last frame of each image sequence has the label of action units. Of the 593 image sequences, there are 327 sequences with emotion. This database is a popular database for facial expression recognition. Many articles will use this data for testing. Specific introduction can refer to the literature [2]
 
-![AU.bmp](../images/au.bmp)
+![AU.bmp](./images/au.bmp)
 
 现介绍对AU图像的预处理操作([take_a_look.ipynb]())。
 
