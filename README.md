@@ -26,7 +26,7 @@ The database contains 123 subjects, 593 image sequences, and the last frame of e
 
 ![AU.bmp](./images/au.bmp)
 
-现介绍对AU图像的预处理操作([take_a_look.ipynb]())。
+现介绍对AU图像的预处理操作([take_a_look.ipynb](https://github.com/jiweibo/AU_Recognition/blob/master/take_a_look.ipynb))。
 
 Now introduce the preprocess of AU image
 
@@ -147,6 +147,45 @@ resnet cell
 ![resnet](./images/resnet.bmp)
 
 
+## Usage
+
+```
+usage: main.py [-h] [--model MODEL] [--epochs N] [--step N] [--start-epoch N]
+               [-b N] [--lr LR] [--resume PATH] [-e]
+               DATA_DIR LABEL_DIR LANDMARK_DIR
+
+AU Recognition
+
+positional arguments:
+  DATA_DIR              path to data dir
+  LABEL_DIR             path to label dir
+  LANDMARK_DIR          path to landmark dir
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --model MODEL         alexnet or vgg16 or vgg16_bn or vgg19 or res18 or
+                        res50 or res101 or inception
+  --epochs N            numer of total epochs to run
+  --step N              numer of epochs to adjust learning rate
+  --start-epoch N       manual epoch number (useful to restarts)
+  -b N, --batch-size N  mini-batch size (default: 32)
+  --lr LR, --learning-rate LR
+                        initial learning rate
+  --resume PATH         path to latest checkpoitn, (default: None)
+  -e, --evaluate        evaluate model on validation set
+```
+
+for example
+
+```
+python main.py E:\DataSets\CKPlus\cohn-kanade-images E:\DataSets\CKPlus\FACS_labels\FACS E:\DataSets\CKPlus\Landmarks\Landmarks --model alexnet --epochs 100 -b 16 --step 10
+
+E:\DataSets\CKPlus\cohn-kanade-images E:\DataSets\CKPlus\FACS_labels\FACS E:\DataSets\CKPlus\Landmarks\Landmarks --model alexnet --epochs 50 -b 16 --step 10 --lr 0.01 --kfold 7
+
+python main.py E:\DataSets\CKPlus\cohn-kanade-images E:\DataSets\CKPlus\FACS_labels\FACS E:\DataSets\CKPlus\Landmarks\Landmarks --model res18 --epochs 50 -b 16 --step 10 --lr 0.01
+```
+
+
 ## Experiments
 
 <table>
@@ -165,42 +204,42 @@ resnet cell
     </tr>
     <tr>
         <th>AlexNet</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>0.83</th>
+        <th>0.88</th>
+        <th>0.8</th>
+        <th>0.72</th>
+        <th>0.74</th>
+        <th>0.63</th>
+        <th>0.86</th>
+        <th>0.64</th>
+        <th>0.88</th>
+        <th>0.92</th>
     </tr>
     <tr>
         <th>VGG16</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>0.81</th>
+        <th>0.83</th>
+        <th>0.71</th>
+        <th>0.64</th>
+        <th>0.69</th>
+        <th>0.5</th>
+        <th>0.76</th>
+        <th>0.52</th>
+        <th>0.83</th>
+        <th>0.88</th>
     </tr>
     <tr>
         <th>VGG16_BN</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>0.78</th>
+        <th>0.86</th>
+        <th>0.75</th>
+        <th>0.71</th>
+        <th>0.7</th>
+        <th>0.55</th>
+        <th>0.78</th>
+        <th>0.52</th>
+        <th>0.79</th>
+        <th>0.89</th>
     </tr>
     <tr>
         <th>Res18</th>
@@ -217,45 +256,50 @@ resnet cell
     </tr>
     <tr>
         <th>Res50</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>0.73</th>
+        <th>0.84</th>
+        <th>0.62</th>
+        <th>0.67</th>
+        <th>0.59</th>
+        <th>0.52</th>
+        <th>0.66</th>
+        <th>0.45</th>
+        <th>0.66</th>
+        <th>0.83</th>
     </tr>
     <tr>
         <th>Res101</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>0.69</th>
+        <th>0.78</th>
+        <th>0.65</th>
+        <th>0.7</th>
+        <th>0.5</th>
+        <th>0.5</th>
+        <th>0.64</th>
+        <th>0.33</th>
+        <th>0.68</th>
+        <th>0.8</th>
     </tr>
     <tr>
         <th>inception</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>0.45</th>
+        <th>0.45</th>
+        <th>0.31</th>
+        <th>0.22</th>
+        <th>0.12</th>
+        <th>0.11</th>
+        <th>0.17</th>
+        <th>0</th>
+        <th>0.26</th>
+        <th>0.7</th>
     </tr>
 </table>
 
+AlexNet is OK
+
+VGG overfeat
+
+Inception and Resnet should reconsider the classifier layer and hyper parameters.
 
 
 ## Acknowledgements
