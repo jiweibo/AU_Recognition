@@ -16,26 +16,26 @@ from Model import *
 
 # <editor-fold desc="settings">
 parser = argparse.ArgumentParser(description='AU Recognition')
-parser.add_argument('data_path_dir', default=r'E:\DataSets\CKPlus\cohn-kanade-images',
-                    metavar='DIR', help='path to data dir')
-parser.add_argument('label_path_dir', default=r'E:\DataSets\CKPlus\FACS_labels\FACS',
-                    metavar='DIR', help='path to label dir')
-parser.add_argument('landmark_path_dir', default=r'E:\DataSets\CKPlus\Landmarks\Landmarks',
-                    metavar='DIR', help='path to landmark dir')
+parser.add_argument('data_path_dir', metavar='DATA_DIR', help='path to data dir')
+parser.add_argument('label_path_dir', metavar='LABEL_DIR', help='path to label dir')
+parser.add_argument('landmark_path_dir', metavar='LANDMARK_DIR', help='path to landmark dir')
 parser.add_argument('--model', default='alexnet', metavar='MODEL',
-                    help='alexnet or vgg16 or vgg16_bn or vgg19 or res18 or res50 or res101 or inception')
+                    help='alexnet or vgg16 or vgg16_bn or vgg19 or res18 or '
+                         'res50 or res101 or inception (default: alexnet)')
 # parser.add_argument('--emotion_path_dir', default=r'E:\DataSets\CKPlus\Emotion_labels\Emotion',
 #                     metavar='DIR', help='path to emotion dir')
 parser.add_argument('--epochs', default=100, type=int, metavar='N',
-                    help='numer of total epochs to run')
+                    help='numer of total epochs to run (default: 100)')
 parser.add_argument('--step', default=20, type=int, metavar='N',
-                    help='numer of epochs to adjust learning rate')
+                    help='numer of epochs to adjust learning rate (default: 20)')
 parser.add_argument('--start-epoch', default=0, type=int, metavar='N',
                     help='manual epoch number (useful to restarts)')
 parser.add_argument('-b', '--batch-size', default=32, type=int, metavar='N',
                     help='mini-batch size (default: 32)')
 parser.add_argument('--lr', '--learning-rate', default=0.01, type=float, metavar='LR',
-                    help='initial learning rate')
+                    help='initial learning rate (default: 0.01)')
+parser.add_argument('--kfold', default=10, type=int, metavar='KFOLD',
+                    help='kfold (default: 10)')
 parser.add_argument('--resume', default='', type=str, metavar='PATH',
                     help='path to latest checkpoitn, (default: None)')
 parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
@@ -177,7 +177,7 @@ def main():
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
 
-    fold = 10
+    fold = args.kfold
     kf = KFold(fold, shuffle=True, random_state=20)
     res_tar, res_pred = [], []
     for k, (train_index, test_index) in enumerate(kf.split(au_image, au_label)):
@@ -208,7 +208,7 @@ def main():
             'state_dict': model.state_dict(),
             'best_prec': best_prec,
             'optimizer': optimizer.state_dict()
-        }, is_best)
+        }, is_best, filename=args.model + '_model')
         print('fold: {0}\t loss: {1}'.format(k, ls))
 
     res_pred = np.array(res_pred)
@@ -226,7 +226,7 @@ def main():
         plot_confusion_matrix(cm, classes=[0, 1])
         # plt.figure()
         # plot_confusion_matrix(cm, classes=[0, 1], normalize=True)
-        plt.show()
+        # plt.show()
         print()
 
     # write to txt

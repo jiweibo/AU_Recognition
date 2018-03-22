@@ -62,13 +62,13 @@ def f1score_helper(output, target, eps=1e-5):
 
 
 def adjust_learning_rate(optimizer, epoch, init_lr, steps=50):
-    """Sets the learning rate to the initial LR decayed by 10 every steps epochs"""
+    """Sets the learning rate to the initial LR decayed by 0.5 every steps epochs"""
     lr = init_lr * (0.5 ** (epoch // steps))
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
 
 
-def save_checkpoint(state, is_best, filename='au_model.pth'):
-    torch.save(state, filename)
+def save_checkpoint(state, is_best, filename='au_model'):
+    torch.save(state, filename+'.pth')
     if is_best:
-        shutil.copyfile(filename, 'au_model_best.pth')
+        shutil.copyfile(filename+'.pth', filename+'_best.pth')

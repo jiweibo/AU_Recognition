@@ -41,73 +41,103 @@ class VGG(nn.Module):
         # )
         # <editor-fold desc="10 basic classifiers">
         self.classifier1 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier2 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier3 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier4 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier5 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier6 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier7 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier8 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier9 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         self.classifier10 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
+            nn.Linear(num_classes, 1024),
             nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
+            nn.Dropout(),
+            nn.Linear(1024, 1024),
+            nn.ReLU(inplace=True),
+            nn.Dropout(),
+            nn.Linear(1024, 1),
             nn.Sigmoid()
         )
         # </editor-fold>
