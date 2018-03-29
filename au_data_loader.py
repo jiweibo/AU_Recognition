@@ -37,9 +37,9 @@ def get_reserved_set(label_path_dir):
     label_set = set(ll)
     reserved_set = set()
     for label in label_set:
-        if ll.count(label) > 90:
+        if ll.count(label) > 35:
             reserved_set.add(label)
-    return reserved_set, returned_label  # (1, 2, 4, 5, 6, 7, 12, 15, 17, 25)
+    return reserved_set, returned_label  # (1, 2, 4, 5, 6, 7, 9, 12, 14, 15, 17, 20, 23, 24, 25, 27)
 
 
 def convert_label(init_label, reserved_set):
@@ -62,9 +62,7 @@ def convert_label(init_label, reserved_set):
     return converted_label
 
 
-def draw_landmark_point(img, landmark_path):
-    img = Image.open(img)
-    landmark = np.loadtxt(landmark_path)
+def draw_landmark_point(img, landmark):
     draw = ImageDraw.Draw(img)
     t = 1
     for point in landmark:
@@ -75,9 +73,9 @@ def draw_landmark_point(img, landmark_path):
 
 def crop_au_img(img, landmark):
     width, height = img.size
-    left = max(int(min(landmark[:, 0])) - 50, 0)
-    right = min(width, int(max(landmark[:, 0] + 50)))
-    top = max(int(min(landmark[:, 1])) - 100, 0)
+    left = max(int(min(landmark[:, 0])) - 10, 0)
+    right = min(width, int(max(landmark[:, 0] + 10)))
+    top = max(int(min(landmark[:, 1])) - 20, 0)
     bottom = min(height, int(max(landmark[:, 1])) + 10)
     img = img.crop((left, top, right, bottom))
     return img

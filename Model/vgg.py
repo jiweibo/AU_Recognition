@@ -40,104 +40,209 @@ class VGG(nn.Module):
         #     nn.Linear(4096, num_classes),
         # )
         # <editor-fold desc="10 basic classifiers">
+        num1, num2 = 512, 128
         self.classifier1 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier2 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier3 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier4 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier5 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier6 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier7 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier8 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier9 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         self.classifier10 = nn.Sequential(
-            nn.Linear(num_classes, 1024),
+            nn.Linear(num_classes, num1),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1024),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
             nn.ReLU(inplace=True),
-            nn.Dropout(),
-            nn.Linear(1024, 1),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier11 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier12 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier13 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier14 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier15 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier16 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier17 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num1),
+            nn.Linear(num1, num2),
+            nn.ReLU(inplace=True),
+            # nn.Dropout(),
+            nn.BatchNorm1d(num2),
+            nn.Linear(num2, 1),
             nn.Sigmoid()
         )
         # </editor-fold>
@@ -156,7 +261,14 @@ class VGG(nn.Module):
         x8 = self.classifier8(x)
         x9 = self.classifier9(x)
         x10 = self.classifier10(x)
-        return torch.cat((x1, x2, x3, x4, x5, x6, x7, x8, x9, x10), 1)
+        x11 = self.classifier11(x)
+        x12 = self.classifier12(x)
+        x13 = self.classifier13(x)
+        x14 = self.classifier14(x)
+        x15 = self.classifier15(x)
+        x16 = self.classifier16(x)
+        x17 = self.classifier17(x)
+        return torch.cat((x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17), 1)
         # x = self.classifier(x)
         # return x
 

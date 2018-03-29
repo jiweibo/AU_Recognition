@@ -42,180 +42,302 @@ class AlexNet(nn.Module):
         #     nn.Linear(4096, num_classes),
         # )
 
-        # <editor-fold desc="10 basic classifiers">
-        self.classifier1 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier2 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier3 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier4 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier5 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier6 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier7 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier8 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier9 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        self.classifier10 = nn.Sequential(
-            nn.Dropout(),
-            nn.Linear(num_classes, 256),
-            nn.ReLU(inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-        # </editor-fold>
-
+        # # <editor-fold desc="17 basic classifiers">
         # self.classifier1 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier2 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier3 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier4 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier5 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier6 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier7 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier8 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier9 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
         # self.classifier10 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
         #     nn.Dropout(),
-        #     nn.Linear(256 * 6 * 6, 4096),
-        #     nn.ReLU(inplace=True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 256),
         #     nn.ReLU(inplace=True),
         #     nn.Linear(256, 1),
         #     nn.Sigmoid()
         # )
+        # self.classifier11 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
+        #     nn.Dropout(),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier12 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
+        #     nn.Dropout(),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier13 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
+        #     nn.Dropout(),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier14 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
+        #     nn.Dropout(),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier15 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
+        #     nn.Dropout(),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier16 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
+        #     nn.Dropout(),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # self.classifier17 = nn.Sequential(
+        #     nn.Linear(num_classes, 256),
+        #     nn.Dropout(),
+        #     nn.ReLU(inplace=True),
+        #     nn.Linear(256, 1),
+        #     nn.Sigmoid()
+        # )
+        # # </editor-fold>
 
+        # <editor-fold desc="17 basic classifiers">
+        num1 = 1024
+        num2 = 128
+        self.classifier1 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier2 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier3 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier4 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier5 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier6 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier7 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier8 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier9 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier10 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier11 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier12 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier13 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier14 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier15 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier16 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        self.classifier17 = nn.Sequential(
+            nn.Linear(num_classes, num1),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num1, num2),
+            nn.Dropout(),
+            nn.ReLU(inplace=True),
+            nn.Linear(num2, 1),
+            nn.Sigmoid()
+        )
+        # </editor-fold>
 
     def forward(self, x):
         x = self.features(x)
@@ -231,7 +353,14 @@ class AlexNet(nn.Module):
         x8 = self.classifier8(x)
         x9 = self.classifier9(x)
         x10 = self.classifier10(x)
-        return torch.cat((x1, x2, x3, x4, x5, x6, x7, x8, x9, x10), 1)
+        x11 = self.classifier11(x)
+        x12 = self.classifier12(x)
+        x13 = self.classifier13(x)
+        x14 = self.classifier14(x)
+        x15 = self.classifier15(x)
+        x16 = self.classifier16(x)
+        x17 = self.classifier17(x)
+        return torch.cat((x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16, x17), 1)
 
 
 def alexnet(pretrained=False, **kwargs):

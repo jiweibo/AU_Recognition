@@ -103,7 +103,9 @@ The dataset in CKPlus is a grayscale image. In addition, the region near the fac
 
 ![image_1](./images/au_image_1.png)
 
-![image_1](./images/au_image_1_process.png)
+![image_1](./images/au_images_landmark.png)
+
+![image_1](./images/au_images_landmark_crop.png)
 
 
 ## Model Architecture
@@ -116,7 +118,7 @@ Using the alexnet, vgg, resnet, and inception network architectures as feature e
 
 The model architecture as shown
 
-![archtecture](./images/model_architecture.bmp)
+![archtecture](./images/au_recognition1.jpg)
 
 ### AlexNet
 
@@ -297,7 +299,7 @@ python main.py E:\DataSets\CKPlus\cohn-kanade-images E:\DataSets\CKPlus\FACS_lab
 
 AlexNet is OK
 
-VGG overfeat
+VGG overfit
 
 Inception and Resnet should reconsider the classifier layer and hyper parameters.
 

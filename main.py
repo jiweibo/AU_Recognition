@@ -49,8 +49,6 @@ best_prec = np.inf
 
 def train(train_loader, model, criterion, optimizer, epoch, print_freq=5):
     losses = AverageMeter()
-    prec = AverageMeterList(10)
-    f1_sc = AverageMeterList(10)
     model.train()
 
     for i, (input, target) in enumerate(train_loader):
@@ -72,26 +70,26 @@ def train(train_loader, model, criterion, optimizer, epoch, print_freq=5):
         loss7 = criterion(output[:, 7], target_var[:, 7])
         loss8 = criterion(output[:, 8], target_var[:, 8])
         loss9 = criterion(output[:, 9], target_var[:, 9])
-        loss = loss0 + loss1 + loss2 + loss3 + loss4 + loss5 + loss6 + loss7 + loss8 + loss9
-        acc = accuracy(output.data, target)
-        # f1 = f1_score(output.data, target)
-        # f1_sc.update(f1, input.size(0))
+        loss10 = criterion(output[:, 10], target_var[:, 10])
+        loss11 = criterion(output[:, 11], target_var[:, 11])
+        loss12 = criterion(output[:, 12], target_var[:, 12])
+        loss13 = criterion(output[:, 13], target_var[:, 13])
+        loss14 = criterion(output[:, 14], target_var[:, 14])
+        loss15 = criterion(output[:, 15], target_var[:, 15])
+        loss16 = criterion(output[:, 16], target_var[:, 16])
+        loss = loss0 + loss1 + loss2 + loss3 + loss4 + loss5 + loss6 + loss7 + loss8 + loss9 + loss10 + loss11 + loss12 + loss13 + loss14 + loss15 + loss16
         losses.update(loss.data[0], input.size(0))
-        prec.update(acc, input.size(0))
 
         loss.backward()
         optimizer.step()
         if (i + 1) % print_freq == 0:
             print('Epoch: [{0}][{1}/{2}]\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})'.format(
-                # 'F1_Score [{3}] ({4})'
                 epoch, i + 1, len(train_loader), loss=losses))
 
 
 def valid(val_loader, model, criterion, print_freq=1):
     losses = AverageMeter()
-    prec = AverageMeterList(10)
-    f1_sc = AverageMeterList(10)
     model.eval()
     return_pred, return_tar = [], []
 
@@ -112,19 +110,21 @@ def valid(val_loader, model, criterion, print_freq=1):
         loss7 = criterion(output[:, 7], target_var[:, 7])
         loss8 = criterion(output[:, 8], target_var[:, 8])
         loss9 = criterion(output[:, 9], target_var[:, 9])
-        loss = loss0 + loss1 + loss2 + loss3 + loss4 + loss5 + loss6 + loss7 + loss8 + loss9
+        loss10 = criterion(output[:, 10], target_var[:, 10])
+        loss11 = criterion(output[:, 11], target_var[:, 11])
+        loss12 = criterion(output[:, 12], target_var[:, 12])
+        loss13 = criterion(output[:, 13], target_var[:, 13])
+        loss14 = criterion(output[:, 14], target_var[:, 14])
+        loss15 = criterion(output[:, 15], target_var[:, 15])
+        loss16 = criterion(output[:, 16], target_var[:, 16])
+        loss = loss0 + loss1 + loss2 + loss3 + loss4 + loss5 + loss6 + loss7 + loss8 + loss9 + loss10 + loss11 + loss12 + loss13 + loss14 + loss15 + loss16
 
         return_pred.extend(output.data.cpu().tolist())
         return_tar.extend(target.tolist())
-        # acc = accuracy(output.data, target)
-        # f1 = f1_score(output.data, target)
         losses.update(loss.data[0], input.size(0))
-        # prec.update(acc, input.size(0))
-        # f1_sc.update(f1, input.size(0))
         if (i + 1) % print_freq == 0:
             print('Validate: [{0}/{1}]\t'
                   'Loss {loss.val:.4f} ({loss.avg:.4f})'.format(
-                # 'F1_Score [{2}] ({3})'
                 i + 1, len(val_loader), loss=losses))
 
     return return_tar, return_pred, np.mean(losses.avg)
@@ -202,32 +202,36 @@ def main():
         res_pred.extend(pred)
         res_tar.extend(tar)
 
-        is_best = ls < best_prec
-        best_prec = min(ls, best_prec)
-        save_checkpoint({
-            'state_dict': model.state_dict(),
-            'best_prec': best_prec,
-            'optimizer': optimizer.state_dict()
-        }, is_best, filename=args.model + '_model')
+        # is_best = ls < best_prec
+        # best_prec = min(ls, best_prec)
+        # save_checkpoint({
+        #     'state_dict': model.state_dict(),
+        #     'best_prec': best_prec,
+        #     'optimizer': optimizer.state_dict()
+        # }, is_best, filename=args.model + '_model')
         print('fold: {0}\t loss: {1}'.format(k, ls))
 
     res_pred = np.array(res_pred)
     res_tar = np.array(res_tar)
 
     out = []
+    threshold = 0.50
+    mean = 0
     for i in range(res_tar.shape[1]):
         print()
         print('AU' + str(list(reserved_set)[i]) + ':' +
-              str(round(f1_score(res_tar[:, i], np.around(res_pred[:, i])), 2)))
+              str(round(f1_score(res_tar[:, i], (res_pred[:, i]>=threshold).astype(np.float32)), 4)))
         out.append('AU' + str(list(reserved_set)[i]) + ':' +
-                   str(round(f1_score(res_tar[:, i], np.around(res_pred[:, i])), 2)))
-        cm = confusion_matrix(res_tar[:, i], np.around(res_pred[:, i]))
+                   str(round(f1_score(res_tar[:, i], (res_pred[:, i]>=threshold).astype(np.float32)), 4)))
+        mean += round(f1_score(res_tar[:, i], (res_pred[:, i]>=threshold).astype(np.float32)), 4)
+        cm = confusion_matrix(res_tar[:, i], (res_pred[:, i]>=threshold).astype(np.float32))
         plt.figure()
         plot_confusion_matrix(cm, classes=[0, 1])
         # plt.figure()
         # plot_confusion_matrix(cm, classes=[0, 1], normalize=True)
         # plt.show()
         print()
+    out.append("AU mean " + str(mean/17))
 
     # write to txt
     output_txt = str(args.model) + '_output.txt'
@@ -281,8 +285,20 @@ def build_model(pretrained=True):
         param.requires_grad = True
     for param in model.classifier10.parameters():
         param.requires_grad = True
-    # for param in model.classifier.parameters():
-    #     param.requires_grad = False
+    for param in model.classifier11.parameters():
+        param.requires_grad = True
+    for param in model.classifier12.parameters():
+        param.requires_grad = True
+    for param in model.classifier13.parameters():
+        param.requires_grad = True
+    for param in model.classifier14.parameters():
+        param.requires_grad = True
+    for param in model.classifier15.parameters():
+        param.requires_grad = True
+    for param in model.classifier16.parameters():
+        param.requires_grad = True
+    for param in model.classifier17.parameters():
+        param.requires_grad = True
     return model, criterion, optimizer
 
 
